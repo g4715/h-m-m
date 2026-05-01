@@ -485,7 +485,7 @@ function check_the_available_clipboard_tool(&$mm)
 
 	// now, the main OS ;)
 
-	exec('command -v xclip || command -v xsel || command -v wl-copy || command -v klipper', $result);
+	exec('command -v termux-clipboard-set || xclip || command -v xsel || command -v wl-copy || command -v klipper', $result);
 	$tool = basename($result[0] ?? '');
 
 	if (trim($tool)==='')
@@ -496,6 +496,11 @@ function check_the_available_clipboard_tool(&$mm)
 
 	switch ($tool)
 	{
+		case 'termux-clipboard-set':
+			$mm['os_clipboard']['write'] = 'termux-clipboard-set';
+			$mm['os_clipboard']['read']  = 'termux-clipboard-get';
+			break;
+
 		case 'xclip':
 			$mm['os_clipboard']['write'] = 'xclip -selection clipboard';
 			$mm['os_clipboard']['read']  = 'xclip -out -selection clipboard';
